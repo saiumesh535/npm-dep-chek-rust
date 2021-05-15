@@ -41,28 +41,29 @@ pub fn check_deps() -> Result<()> {
     let pkg_path = PathBuf::new().join(inputs.package);
     let packages = read_dev_packages(&pkg_path)?;
 
+
     let mut package_counter: PackageCounterType = HashMap::new();
-    let mut regext_map: HashMap<String, Vec<Regex>> = HashMap::new();
+    let mut regex_map: HashMap<String, Vec<Regex>> = HashMap::new();
 
     let cloned_regex_vector = REGEX_VECTOR.to_vec();
 
     // iterate through HashMap and get package names
     for (package, _) in &packages {
-        if !should_ignore_by_text(package) {
+        if !should_ignore_by_text(&package) {
             package_counter.insert(package.to_string(), 0);
-            let mut insert_regext_vector = vec![];
+            let mut insert_regex_vector = vec![];
             for regex in &cloned_regex_vector {
-                let regext_by_replace = regex.replace("%name%", package);
-                insert_regext_vector.push(Regex::new(regext_by_replace.as_str()).unwrap());
+                let regex_by_replace = regex.replace("%name%", package.as_str());
+                insert_regex_vector.push(Regex::new(regex_by_replace.as_str()).unwrap());
             }
-            regext_map.insert(package.to_string(), insert_regext_vector);
+            regex_map.insert(package.to_string(), insert_regex_vector);
         }
     }
 
     iterate_dir_files(
         &PathBuf::new().join(dir_path),
         &mut package_counter,
-        regext_map,
+        regex_map,
     )?;
 
     let mut un_used_packages: Vec<String> = vec![];
@@ -73,7 +74,7 @@ pub fn check_deps() -> Result<()> {
     }
 
     if un_used_packages.len() == 0 {
-        println!("No unsed packages");
+        println!("No unused packages");
         return Ok(());
     }
 
@@ -82,5 +83,6 @@ pub fn check_deps() -> Result<()> {
     for un_used_package in un_used_packages {
         println!("* {:?}", un_used_package);
     }
+    
     Ok(())
 }
