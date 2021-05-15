@@ -1,0 +1,86 @@
+name: Rust
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, windows-latest, macOS-latest]
+        rust: [stable]
+    steps:
+      - uses: hecrj/setup-rust-action@v1
+        with:
+          rust-version: ${{ matrix.rust }}
+      - uses: actions/checkout@master
+      - name: Run build
+        run: cargo build --release
+      
+      - name: rename file linux 
+        if: matrix.os == 'ubuntu-20.04'
+        run: mv target/release/npm-dep-check-rust ./npm-dep-check-rust-linux
+      
+      - name: rename file mac
+        if: matrix.os == 'macOS-latest'
+        run: mv target/release/npm-dep-check-rust ./npm-dep-check-rust-mac
+
+      - name: "${{ matrix.os }}-artifact"
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v2
+        with:
+          name: "${{ matrix.os }}-artifact"
+          path: target/release/npm-dep-check-rust.exe
+          retention-days: 0
+      
+      - name: "Uploading exec for ${{matrix.os}}"
+        if: matrix.os == 'ubuntu-20.04'
+        uses: actions/upload-artifact@v2
+        with:
+          name: "${{ matrix.os }}-artifact"
+          path: ./npm-dep-check-rust-linux
+          retention-days: 0
+      
+      - name: "Uploading exec for ${{matrix.os}}"
+        if: matrix.os == 'macOS-latest'
+        uses: actions/upload-artifact@v2
+        with:
+          name: "${{ matrix.os }}-artifact"
+          path: ./npm-dep-check-rust-mac
+          retention-days: 0
+
+  release:
+    needs: [build]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@master
+      - name: Downloading windows exec
+        uses: actions/download-artifact@v2
+        with:
+          name: windows-latest-artifact
+          path: ./
+      - name: Downloading mac exec
+        uses: actions/download-artifact@v2
+        with:
+          name: macOS-latest-artifact
+          path: ./
+      - name: Downloading linux exec
+        uses: actions/download-artifact@v2
+        with:
+          name: ubuntu-20.04-artifact
+          path: ./
+
+      - name: print files
+        run: ls
+
+      - name: Releasing
+        uses: ncipollo/release-action@v1
+        with:
+          name: "First release"
+          tag: "v0.0.1"
+          artifacts: "npm-dep-check-rust-linux, npm-dep-check-rust-mac, npm-dep-check-rust.exe"
+          token: ${{ secrets.GITHUB_TOKEN }}

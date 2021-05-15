@@ -1,0 +1,17 @@
+{
+  "name": "npmproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^15.0.1",
+    "nanoid": "2.1.11",
+    "shortid": "2.2.15"
+  }
+}
