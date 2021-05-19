@@ -77,14 +77,14 @@ pub fn iterate_dir_files(
 ) -> Result<()> {
     let mut paths: Vec<PathBuf> = vec![];
     get_all_paths(dir_path, &mut paths)?;
-    let mut packages: Vec<String> = vec![];
-    for (package, _) in deps_count.iter() {
-        packages.push(package.to_string());
-    }
     // read content from each path and check condition
     for path in paths {
         let content = read_file_from_path(&path)?;
-        for package in &packages {
+        for (package, _) in &regex_map {
+            // if package count is already more than 0. then skip
+            if *deps_count.get(package).unwrap() > 0 {
+                continue;
+            }
             if check_if_package_used_regex(&content, regex_map.get(package).unwrap()) {
                 deps_count
                     .entry(package.to_string())
