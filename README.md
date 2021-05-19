@@ -1,5 +1,9 @@
 # npm-dep-check-rust
 
+Helps you find unused dependencies in Nodejs applications. 
+
+:warning: Might not work well with **webpack** based applications. 
+
 ```cmd
 npm-dep-check-rust --help
 ```
