@@ -1,1 +1,28 @@
 # npm-dep-check-rust
+
+```cmd
+npm-dep-check-rust --help
+```
+
+```cmd
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -p, --package <package>    path to package.json
+    -s, --src <source>         path to source directory
+```
+
+### sample command
+
+```
+./npm-dep-check-rust --src=./<path-to-source> --package=./<path-to-package.json>
+```
+
+**Sample output**
+
+```cmd
+* "shortid"
+Executed in: 12.322209ms
+```
