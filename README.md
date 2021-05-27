@@ -2,6 +2,10 @@
 
 Helps you find unused dependencies in Nodejs applications. 
 
+### Installation 
+
+Goto release and download latest version from assets. 
+
 :warning: Might not work well with **webpack** based applications. 
 
 ```cmd
