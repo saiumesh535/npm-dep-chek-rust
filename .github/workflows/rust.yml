@@ -80,7 +80,7 @@ jobs:
       - name: Releasing
         uses: ncipollo/release-action@v1
         with:
-          name: "Updated the doc"
-          tag: "v0.0.4"
+          name: "Added Installation guide"
+          tag: "v0.0.5"
           artifacts: "npm-dep-check-rust-linux, npm-dep-check-rust-mac, npm-dep-check-rust.exe"
           token: ${{ secrets.GITHUB_TOKEN }}
