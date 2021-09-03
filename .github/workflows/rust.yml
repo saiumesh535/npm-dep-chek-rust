@@ -81,6 +81,6 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: "Added Installation guide"
-          tag: "v0.0.5"
+          tag: "v0.0.6"
           artifacts: "npm-dep-check-rust-linux, npm-dep-check-rust-mac, npm-dep-check-rust.exe"
           token: ${{ secrets.GITHUB_TOKEN }}
