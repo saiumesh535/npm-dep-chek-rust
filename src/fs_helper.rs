@@ -21,12 +21,12 @@ fn read_file_from_path(path: &PathBuf) -> Result<String> {
     Ok(read_to_string(path).context(ReadConfiguration { path })?)
 }
 
-pub fn read_dev_packages(pkg_path: &PathBuf) -> JsonMap {
+pub fn read_dev_packages(pkg_path: &PathBuf, key: &str) -> JsonMap {
     let package = read_file_from_path(&pkg_path)?;
     let mut content: HashMap<String, Value> =
         from_str(package.as_str()).context(Deserialization)?;
     let dependencies: DepType =
-        from_value(content.get_mut("dependencies").unwrap().take()).context(Deserialization)?;
+        from_value(content.get_mut(key).unwrap().take()).context(Deserialization)?;
     Ok(dependencies)
 }
 
